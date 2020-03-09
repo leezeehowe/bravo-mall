@@ -53,7 +53,7 @@ public class CodeGenerator {
      * @return 账户名
      */
     public static String getAuthorNameFromScanner() {
-        return scanner("你的昵称(用于Java类的@author)");
+        return scanner("请输入你的昵称(用于Java类的@author)");
     }
 
     public static boolean getFileOverrideChoiceFromScanner() {
@@ -74,7 +74,7 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir") + "\\" + scanner("Maven模块名");
+        String projectPath = System.getProperty("user.dir") + "\\" + scanner("请输入Maven模块名");
         // 生成文件的输出文件夹
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(getAuthorNameFromScanner());
@@ -93,7 +93,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
 //        pc.setModuleName();
-        pc.setParent(scanner("包名"));
+        pc.setParent(scanner("请输入包名"));
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -130,14 +130,14 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass(scanner("实体类父类的完整路径（无：回车）"));
+        strategy.setSuperEntityClass(scanner("请输入实体类父类的完整路径（无：回车）"));
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 公共父类
-        strategy.setSuperControllerClass(scanner("控制器类父类的完整路径（无：回车）"));
+        strategy.setSuperControllerClass(scanner("请输入控制器类父类的完整路径（无：回车）"));
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id");
-        strategy.setExclude(scanner("不需要生成代码的表名，多个英文逗号分割").split(","));
+        strategy.setExclude(scanner("请输入不需要生成代码的表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
 //        strategy.setTablePrefix(pc.getModuleName() + "_");
 
@@ -161,12 +161,9 @@ public class CodeGenerator {
      */
     public static String scanner(String tip) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入" + tip + "：");
+        System.out.println(tip);
         if (scanner.hasNext()) {
-            String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
-                return ipt;
-            }
+            return scanner.next();
         }
         throw new MybatisPlusException("请输入正确的" + tip + "！");
     }

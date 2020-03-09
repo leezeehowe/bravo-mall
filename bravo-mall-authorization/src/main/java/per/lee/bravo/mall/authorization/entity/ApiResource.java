@@ -1,7 +1,6 @@
 package per.lee.bravo.mall.authorization.entity;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,9 +14,9 @@ import lombok.experimental.Accessors;
  * @since 2020-03-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class ApiResource extends BaseEntity implements Serializable {
+public class ApiResource extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,12 +26,17 @@ public class ApiResource extends BaseEntity implements Serializable {
     private String url;
 
     /**
+     * 资源名
+     */
+    private String name;
+
+    /**
      * 接口状态，0->可用，1->不可用
      */
     private Integer status;
 
     /**
-     * 接口所属服务名
+     * 资源所属服务名
      */
     private String belongTo;
 
@@ -42,7 +46,7 @@ public class ApiResource extends BaseEntity implements Serializable {
     private String description;
 
     /**
-     * 创建该接口资源的账户id
+     * 创建该资源的账户id, 0->系统初始化
      */
     private Long createBy;
 
@@ -50,6 +54,11 @@ public class ApiResource extends BaseEntity implements Serializable {
      * 修改该角色的账号id，0->系统初始化
      */
     private Long updateBy;
+
+    /**
+     * 资源版本
+     */
+    private String version;
 
     /**
      * 创建时间

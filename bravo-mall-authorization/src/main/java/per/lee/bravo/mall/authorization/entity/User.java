@@ -1,7 +1,9 @@
 package per.lee.bravo.mall.authorization.entity;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
+
+import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
+import per.lee.bravo.mall.authorization.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,24 +17,29 @@ import lombok.experimental.Accessors;
  * @since 2020-03-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 外部服务的用户id
+     * 用户中心的用户账号uuid
      */
-    private String externalId;
+    private String userUuid;
 
     /**
-     * 创建该颁发记录的账户id，0->系统初始化
+     * 状态，0->有效，1->无效
+     */
+    private Status status;
+
+    /**
+     * 创建该颁发记录的账户id，0->系统自动操作
      */
     private Long createBy;
 
     /**
-     * 修改该颁发记录的账户id，0->系统初始化
+     * 修改该颁发记录的账户id，0->系统自动操作
      */
     private Long updateBy;
 
@@ -46,9 +53,5 @@ public class User extends BaseEntity implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public User(String externalId, Long createBy, Long updateBy) {
-        this.externalId = externalId;
-        this.createBy = createBy;
-        this.updateBy = updateBy;
-    }
+
 }

@@ -1,11 +1,12 @@
 package per.lee.bravo.mall.authorization.entity;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
+
+import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
+import per.lee.bravo.mall.authorization.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 
 /**
  * <p>
@@ -16,9 +17,9 @@ import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
  * @since 2020-03-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class Role extends BaseEntity implements Serializable {
+public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

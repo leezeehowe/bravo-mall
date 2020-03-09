@@ -91,6 +91,7 @@ create table role_issue
     update_time datetime default current_timestamp on update current_timestamp comment '最后一次更新时间'
 ) comment '角色颁发表，即用户与角色之间的映射';
 
+
 /**
   用户表：服务内部的用户表，为了解耦。
  */
@@ -98,6 +99,7 @@ create table user
 (
     id          bigint auto_increment primary key comment '主键，自增',
     user_uuid   char(32) not null comment '用户中心的用户账号uuid',
+    status      int(1) default 0 comment '状态，0->有效，1->无效',
     create_by   bigint not null comment '创建该颁发记录的账户id，0->系统自动操作',
     update_by   bigint not null comment '修改该颁发记录的账户id，0->系统自动操作',
 

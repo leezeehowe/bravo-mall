@@ -1,7 +1,7 @@
 package per.lee.bravo.mall.authorization.entity;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
+import per.lee.bravo.mall.authorization.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
  * @since 2020-03-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class WebpageResource extends BaseEntity implements Serializable {
+public class WebpageResource extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,9 +27,14 @@ public class WebpageResource extends BaseEntity implements Serializable {
     private String parId;
 
     /**
-     * 名称
+     * 资源名
      */
     private String name;
+
+    /**
+     * 页面文字内容
+     */
+    private String text;
 
     /**
      * URL
@@ -65,6 +70,11 @@ public class WebpageResource extends BaseEntity implements Serializable {
      * 修改该页面资源的账号id，0->系统初始化
      */
     private Long updateBy;
+
+    /**
+     * 资源版本
+     */
+    private String version;
 
     /**
      * 创建时间

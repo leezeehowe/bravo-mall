@@ -7,6 +7,6 @@ public class PostRoleIssueDto {
 
     private Long roleId;
 
-    private String externalUserId;
+    private String issuedUserExternalId;
 
 }

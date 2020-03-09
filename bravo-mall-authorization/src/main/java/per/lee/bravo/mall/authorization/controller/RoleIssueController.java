@@ -34,7 +34,7 @@ public class RoleIssueController extends BaseController{
         Long roleId;
         // 颁发对象 - 用户的外部id
         String externalUserId;
-        externalUserId = dto.getExternalUserId();
+        externalUserId = dto.getIssuedUserExternalId();
         roleId = dto.getRoleId();
         roleIssueService.issueRole(externalUserId, roleId, true);
     }
