@@ -3,7 +3,6 @@ package per.lee.bravo.mall.authorization.entity;
 import java.time.LocalDateTime;
 
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
-import per.lee.bravo.mall.authorization.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

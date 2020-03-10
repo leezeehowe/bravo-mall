@@ -2,7 +2,7 @@ package per.lee.bravo.mall.authorization.service.impl;
 
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 import per.lee.bravo.mall.authorization.entity.Role;
-import per.lee.bravo.mall.authorization.exception.common.NotFoundException;
+import per.lee.bravo.mall.authorization.exception.dao.EntityNotFoundException;
 import per.lee.bravo.mall.authorization.exception.role.NoneffectiveRoleException;
 import per.lee.bravo.mall.authorization.mapper.RoleMapper;
 import per.lee.bravo.mall.authorization.service.IRoleService;
@@ -23,9 +23,9 @@ import java.util.Optional;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
 
     @Override
-    public void isRoleAvailable(Long roleId) throws NoneffectiveRoleException, NotFoundException {
-        Role role = Optional.of(getById(roleId))
-                .orElseThrow(NotFoundException::new);
+    public void isRoleAvailable(Long roleId) throws NoneffectiveRoleException, EntityNotFoundException {
+        Role role = Optional.ofNullable(getById(roleId))
+                .orElseThrow(() -> new EntityNotFoundException(Role.class, "roleId", roleId));
         if(Status.NONEFFECTIVE.equals(role.getStatus())) {
             throw new NoneffectiveRoleException();
         }

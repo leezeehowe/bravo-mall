@@ -1,11 +1,16 @@
 package per.lee.bravo.mall.authorization.exception;
 
+import per.lee.bravo.mall.authorization.restful.BsonApiException;
+
 /**
- * 权限系统的运行时异常
+ * 权限系统的业务异常
  */
-public class AuthorizationSystemException extends Exception {
+public class AuthorizationSystemException extends BsonApiException {
+
+    private static String message = "权限系统业务操作异常";
 
     public AuthorizationSystemException() {
+        super(message);
     }
 
     public AuthorizationSystemException(String message) {

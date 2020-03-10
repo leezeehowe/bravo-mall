@@ -1,12 +1,15 @@
 package per.lee.bravo.mall.authorization.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import per.lee.bravo.mall.authorization.constant.illegalDtoParametereEnum.UserIllegalParam;
 import per.lee.bravo.mall.authorization.constant.typeEnum.DbOperation;
 import per.lee.bravo.mall.authorization.entity.User;
-import per.lee.bravo.mall.authorization.exception.common.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.common.NotFoundException;
+import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
+import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
+import per.lee.bravo.mall.authorization.exception.dao.EntityNotFoundException;
 import per.lee.bravo.mall.authorization.mapper.UserMapper;
 import per.lee.bravo.mall.authorization.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,7 +33,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private String UUID_KEY;
 
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
 
     public String getRequestingUserExternalId() {
@@ -38,13 +41,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public User getRequestingUser(boolean createIfAbsent) throws DaoOperationException {
+    public User getRequestingUser(boolean createIfAbsent) throws DaoOperationException, IllegalDtoParameterException {
         String externalId = getRequestingUserExternalId();
         return getOne(externalId, true);
     }
 
     @Override
-    public User getOne(String externalId, boolean createIfAbsent) throws DaoOperationException {
+    public User getOne(String externalId, boolean createIfAbsent) throws DaoOperationException, IllegalDtoParameterException {
+        if(StrUtil.isEmptyOrUndefined(externalId)) {
+            throw new IllegalDtoParameterException(UserIllegalParam.EXTERNAL_ID.withValue(externalId));
+        }
         User user = getOne(new QueryWrapper<User>().eq("external_id", externalId), false);
         if(user == null && createIfAbsent) {
             if(save(new User(externalId, 0L, 0L))) {
@@ -53,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new DaoOperationException(DbOperation.INSERT, User.class);
         }
         else if(user == null){
-            throw new NotFoundException(User.class, "externalId", externalId);
+            throw new EntityNotFoundException(User.class, "externalId", externalId);
         }
         else {
             return user;

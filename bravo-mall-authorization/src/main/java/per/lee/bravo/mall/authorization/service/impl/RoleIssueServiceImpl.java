@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 import per.lee.bravo.mall.authorization.entity.RoleIssue;
 import per.lee.bravo.mall.authorization.entity.User;
-import per.lee.bravo.mall.authorization.exception.common.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.common.NotFoundException;
+import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
+import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
 import per.lee.bravo.mall.authorization.exception.role.NoneffectiveRoleException;
 import per.lee.bravo.mall.authorization.mapper.RoleIssueMapper;
 import per.lee.bravo.mall.authorization.service.IRoleIssueService;
@@ -43,7 +43,7 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
     }
 
     @Override
-    public void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws DaoOperationException, NoneffectiveRoleException {
+    public void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws DaoOperationException, NoneffectiveRoleException, IllegalDtoParameterException {
         RoleIssue roleIssue;
         User internalUser, requestingUser;
         // 检查颁发对象 - 角色 当前是否可用（是否存在 or 是否停用）

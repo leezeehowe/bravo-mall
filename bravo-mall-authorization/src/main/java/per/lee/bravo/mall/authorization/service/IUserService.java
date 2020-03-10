@@ -2,8 +2,9 @@ package per.lee.bravo.mall.authorization.service;
 
 import per.lee.bravo.mall.authorization.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import per.lee.bravo.mall.authorization.exception.common.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.common.NotFoundException;
+import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
+import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
+import per.lee.bravo.mall.authorization.exception.dao.EntityNotFoundException;
 
 /**
  * <p>
@@ -27,16 +28,16 @@ public interface IUserService extends IService<User> {
      * @return 用户实体类
      * @throws DaoOperationException 自动创建用户失败
      */
-    User getRequestingUser(boolean createIfAbsent) throws DaoOperationException;
+    User getRequestingUser(boolean createIfAbsent) throws DaoOperationException, IllegalDtoParameterException;
 
     /**
      * 外部用户到系统内用户的映射
      * @param externalId 外部用户id
      * @param createIfAbsent 是否自动创建用户当系统当前不存在该用户
      * @return 用户实体类
-     * @throws NotFoundException 当 createIfAbsent = false，且系统当前缺少该条映射时，抛出此异常。
+     * @throws EntityNotFoundException 当 createIfAbsent = false，且系统当前缺少该条映射时，抛出此异常。
      * @throws DaoOperationException 自动创建用户失败
      */
-    User getOne(String externalId, boolean createIfAbsent) throws NotFoundException, DaoOperationException;
+    User getOne(String externalId, boolean createIfAbsent) throws EntityNotFoundException, DaoOperationException, IllegalDtoParameterException;
 
 }

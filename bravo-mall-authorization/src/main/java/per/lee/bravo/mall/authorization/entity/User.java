@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     /**
      * 用户中心的用户账号uuid
      */
-    private String userUuid;
+    private String externalId;
 
     /**
      * 状态，0->有效，1->无效
@@ -54,4 +54,9 @@ public class User extends BaseEntity {
     private LocalDateTime updateTime;
 
 
+    public User(String externalId, Long createBy, Long updateBy) {
+        this.externalId = externalId;
+        this.createBy = createBy;
+        this.updateBy = updateBy;
+    }
 }

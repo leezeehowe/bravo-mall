@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import per.lee.bravo.mall.authorization.dto.PostRoleIssueDto;
-import per.lee.bravo.mall.authorization.entity.User;
-import per.lee.bravo.mall.authorization.exception.common.DaoOperationException;
+import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
+import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
 import per.lee.bravo.mall.authorization.exception.role.NoneffectiveRoleException;
 
 /**
@@ -29,7 +29,7 @@ public class RoleIssueController extends BaseController{
      * @throws NoneffectiveRoleException 角色当前不可用
      */
     @PostMapping
-    public void post(@RequestBody PostRoleIssueDto dto) throws DaoOperationException, NoneffectiveRoleException {
+    public void post(@RequestBody PostRoleIssueDto dto) throws DaoOperationException, NoneffectiveRoleException, IllegalDtoParameterException {
         // 颁发对象 - 角色id
         Long roleId;
         // 颁发对象 - 用户的外部id

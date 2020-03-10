@@ -3,8 +3,9 @@ package per.lee.bravo.mall.authorization.service;
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 import per.lee.bravo.mall.authorization.entity.RoleIssue;
 import com.baomidou.mybatisplus.extension.service.IService;
-import per.lee.bravo.mall.authorization.exception.common.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.common.NotFoundException;
+import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
+import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
+import per.lee.bravo.mall.authorization.exception.dao.EntityNotFoundException;
 import per.lee.bravo.mall.authorization.exception.role.NoneffectiveRoleException;
 
 /**
@@ -22,11 +23,11 @@ public interface IRoleIssueService extends IService<RoleIssue> {
      * @param externalUserId 外部用户id
      * @param roleId 角色id
      * @param createCreateUserIfAbsent 是否自动内外部用户映射当系统当前无该外部用户记录
-     * @throws NotFoundException 无该用户时且createCreateUserIfAbsent = false时
+     * @throws EntityNotFoundException 无该用户时且createCreateUserIfAbsent = false时
      * @throws NoneffectiveRoleException 角色当前不可用
      * @throws DaoOperationException 自动创建用户失败
      */
-    void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws NotFoundException, NoneffectiveRoleException, DaoOperationException;
+    void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws EntityNotFoundException, NoneffectiveRoleException, DaoOperationException, IllegalDtoParameterException;
 
 
     /**
