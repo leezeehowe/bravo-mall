@@ -1,13 +1,15 @@
 package per.lee.bravo.mall.authorization.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import per.lee.bravo.bsonapi.constant.enums.DbOperation;
+import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
+import per.lee.bravo.bsonapi.exception.dto.IllegalDtoParameterAbstractException;
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
+import per.lee.bravo.mall.authorization.entity.Role;
 import per.lee.bravo.mall.authorization.entity.RoleIssue;
 import per.lee.bravo.mall.authorization.entity.User;
-import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
-import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.role.NoneffectiveRoleException;
 import per.lee.bravo.mall.authorization.mapper.RoleIssueMapper;
 import per.lee.bravo.mall.authorization.service.IRoleIssueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,7 +45,7 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
     }
 
     @Override
-    public void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws DaoOperationException, NoneffectiveRoleException, IllegalDtoParameterException {
+    public void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws DaoOperationAbstractException, IllegalDtoParameterAbstractException {
         RoleIssue roleIssue;
         User internalUser, requestingUser;
         // 检查颁发对象 - 角色 当前是否可用（是否存在 or 是否停用）
@@ -65,7 +67,8 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
         if(getOne(internalUser.getId(), roleId, Status.EFFECTIVE) == null) {
             save(roleIssue);
         } else {
-            throw
+            throw new EntityConflictException(DbOperation.INSERT, Role.class)
+                    .withDetail(StrUtil.format("该账号[{}]已经颁发过该角色[{}]了", externalUserId, roleId));
         }
     }
 }

@@ -107,7 +107,7 @@
             <!-- Swagger2 end-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>bson-api-starter</artifactId>
+                <artifactId>bravo-api-starter</artifactId>
                 <version>${bson-api-starter.version}</version>
             </dependency>
         </dependencies>

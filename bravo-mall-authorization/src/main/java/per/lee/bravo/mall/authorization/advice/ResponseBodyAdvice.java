@@ -1,8 +1,8 @@
 package per.lee.bravo.mall.authorization.advice;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import per.lee.bravo.bsonapi.advice.BsonApiWrapperResponseAdvice;
+import per.lee.bravo.bsonapi.advice.BravoApiWrapperResponseAdvice;
 
 @RestControllerAdvice
-public class ResponseBodyAdvice extends BsonApiWrapperResponseAdvice {
+public class ResponseBodyAdvice extends BravoApiWrapperResponseAdvice {
 }

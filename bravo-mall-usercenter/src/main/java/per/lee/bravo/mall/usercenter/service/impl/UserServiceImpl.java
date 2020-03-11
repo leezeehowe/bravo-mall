@@ -1,18 +1,16 @@
 package per.lee.bravo.mall.usercenter.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
 import per.lee.bravo.mall.usercenter.constant.operationError.InternalOperationErrorEnum;
 import per.lee.bravo.mall.usercenter.dto.Code2SessionResultDto;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
 import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccountEntity;
-import per.lee.bravo.mall.usercenter.exception.internal.AbsentUUIDException;
 import per.lee.bravo.mall.usercenter.exception.wechat.Code2SessionApiException;
 import per.lee.bravo.mall.usercenter.service.*;
 import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
@@ -84,12 +82,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws AbsentUUIDException {
+    public FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws DaoOperationAbstractException {
         QueryWrapper<FundamentalAccountEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid).last("LIMIT 1");
         return Optional
                 .ofNullable(fundamentalAccountEntityService.getOne(queryWrapper, false))
-                .orElseThrow(() -> new AbsentUUIDException(InternalOperationErrorEnum.ABSENT_UUID));
+                .orElseThrow(() -> new EntityNotFoundException(FundamentalAccountEntity.class)
+                        .withDetail(InternalOperationErrorEnum.ABSENT_UUID.getDes()));
     }
 
     /**

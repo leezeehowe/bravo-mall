@@ -60,6 +60,34 @@
 
 
 
+## 异常处理
+
+### `BsonApiErrorContext`
+
+异常处理的主要工具，是一个异常上下文`bean`，用于管理每个`HTTP`请求的业务链上的异常。
+
+####  `API`
+
+`BsonApiErrorContext`所有的`api`非常简单明了。
+
+##### add
+
+添加一个异常到异常上下文中。
+
+##### withdraw
+
+待斟酌是否真的需要
+
+##### flush
+
+返回当前异常上下文中的所有异常
+
+##### toErrors
+
+生成`bson-api`的`errors`字段。
+
+
+
 ## 规定
 
 #### 程序规定

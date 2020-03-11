@@ -1,5 +1,6 @@
 package per.lee.bravo.mall.usercenter.service;
 
+import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
 import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccountEntity;
 import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
@@ -38,6 +39,6 @@ public interface UserService{
      * @param uuid 账户uuid
      * @return 基本用户信息
      */
-    FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws AbsentUUIDException;
+    FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws AbsentUUIDException, DaoOperationAbstractException;
 
 }

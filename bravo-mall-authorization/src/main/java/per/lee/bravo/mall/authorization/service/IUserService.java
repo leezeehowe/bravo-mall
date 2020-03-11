@@ -1,10 +1,10 @@
 package per.lee.bravo.mall.authorization.service;
 
+import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
+import per.lee.bravo.bsonapi.exception.dto.IllegalDtoParameterAbstractException;
 import per.lee.bravo.mall.authorization.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import per.lee.bravo.mall.authorization.exception.IllegalDtoParameterException;
-import per.lee.bravo.mall.authorization.exception.dao.DaoOperationException;
-import per.lee.bravo.mall.authorization.exception.dao.EntityNotFoundException;
+
 
 /**
  * <p>
@@ -26,9 +26,9 @@ public interface IUserService extends IService<User> {
      * 获取此次http请求的用户实体类
      * @param createIfAbsent 是否自动创建用户当系统当前不存在该用户
      * @return 用户实体类
-     * @throws DaoOperationException 自动创建用户失败
+     * @throws DaoOperationAbstractException 自动创建用户失败
      */
-    User getRequestingUser(boolean createIfAbsent) throws DaoOperationException, IllegalDtoParameterException;
+    User getRequestingUser(boolean createIfAbsent) throws DaoOperationAbstractException, IllegalDtoParameterAbstractException;
 
     /**
      * 外部用户到系统内用户的映射
@@ -36,8 +36,8 @@ public interface IUserService extends IService<User> {
      * @param createIfAbsent 是否自动创建用户当系统当前不存在该用户
      * @return 用户实体类
      * @throws EntityNotFoundException 当 createIfAbsent = false，且系统当前缺少该条映射时，抛出此异常。
-     * @throws DaoOperationException 自动创建用户失败
+     * @throws DaoOperationAbstractException 自动创建用户失败
      */
-    User getOne(String externalId, boolean createIfAbsent) throws EntityNotFoundException, DaoOperationException, IllegalDtoParameterException;
+    User getOne(String externalId, boolean createIfAbsent) throws IllegalDtoParameterAbstractException, DaoOperationAbstractException;
 
 }

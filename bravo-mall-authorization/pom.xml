@@ -55,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>bson-api-starter</artifactId>
+            <artifactId>bravo-api-starter</artifactId>
         </dependency>
     </dependencies>
 
