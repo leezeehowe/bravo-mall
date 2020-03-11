@@ -62,8 +62,10 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
         roleIssue.setCreateBy(requestingUser.getId());
         roleIssue.setUpdateBy(requestingUser.getId());
         // 若当前已经有有效的颁发记录则无需新建
-        if(getOne(internalUser.getId(), roleId, Status.EFFECTIVE) != null) {
+        if(getOne(internalUser.getId(), roleId, Status.EFFECTIVE) == null) {
             save(roleIssue);
+        } else {
+            throw
         }
     }
 }

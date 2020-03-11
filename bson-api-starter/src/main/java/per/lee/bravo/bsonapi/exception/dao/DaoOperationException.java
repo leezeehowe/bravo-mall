@@ -1,12 +1,11 @@
-package per.lee.bravo.mall.authorization.exception.dao;
+package per.lee.bravo.bsonapi.exception.dao;
 
 import lombok.Getter;
 import lombok.Setter;
-import per.lee.bravo.mall.authorization.constant.typeEnum.DbOperation;
-import per.lee.bravo.mall.authorization.entity.BaseEntity;
-import per.lee.bravo.mall.authorization.exception.AuthorizationSystemException;
+import per.lee.bravo.bsonapi.constant.typeenum.DbOperation;
+import per.lee.bravo.bsonapi.exception.BsonApiException;
 
-public class DaoOperationException extends AuthorizationSystemException {
+public class DaoOperationException extends BsonApiException {
 
     private static String message = "数据层操作失败";
 

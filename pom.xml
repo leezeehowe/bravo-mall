@@ -20,6 +20,7 @@
         <jjwt.version>0.9.0</jjwt.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-bootstrap-ui.version>1.9.0</swagger-bootstrap-ui.version>
+        <bson-api-starter.version>0.0.2</bson-api-starter.version>
     </properties>
 
     <!-- The Basics -->
@@ -104,6 +105,11 @@
                 <version>${swagger-bootstrap-ui.version}</version>
             </dependency>
             <!-- Swagger2 end-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>bson-api-starter</artifactId>
+                <version>${bson-api-starter.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

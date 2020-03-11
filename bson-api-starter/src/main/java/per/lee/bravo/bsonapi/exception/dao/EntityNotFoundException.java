@@ -1,12 +1,11 @@
-package per.lee.bravo.mall.authorization.exception.dao;
+package per.lee.bravo.bsonapi.exception.dao;
 
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
-import per.lee.bravo.mall.authorization.constant.typeEnum.DbOperation;
-import per.lee.bravo.mall.authorization.entity.BaseEntity;
+import per.lee.bravo.bsonapi.constant.typeenum.DbOperation;
 
 import java.util.Optional;
 

@@ -1,6 +1,7 @@
 package per.lee.bravo.mall.authorization.exception;
 
-import per.lee.bravo.mall.authorization.restful.BsonApiException;
+
+import per.lee.bravo.bsonapi.exception.BsonApiException;
 
 /**
  * 权限系统的业务异常

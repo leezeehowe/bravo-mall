@@ -3,8 +3,9 @@ package per.lee.bravo.mall.authorization.vo;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import per.lee.bravo.mall.authorization.restful.body.data.DataItem;
-import per.lee.bravo.mall.authorization.restful.vo.BsonApiDataItem;
+import per.lee.bravo.bsonapi.body.data.DataItem;
+import per.lee.bravo.bsonapi.vo.BsonApiDataItem;
+
 
 import java.util.Map;
 
