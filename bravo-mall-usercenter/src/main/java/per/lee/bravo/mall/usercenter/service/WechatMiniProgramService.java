@@ -2,7 +2,7 @@ package per.lee.bravo.mall.usercenter.service;
 
 
 import per.lee.bravo.mall.usercenter.dto.Code2SessionResultDto;
-import per.lee.bravo.mall.usercenter.exception.wechat.Code2SessionApiException;
+import per.lee.bravo.mall.usercenter.restful.protocol.BravoApiException;
 
 public interface WechatMiniProgramService {
 
@@ -11,5 +11,5 @@ public interface WechatMiniProgramService {
      * @param js_code 临时登录凭证
      * @return Code2SessionResult
      */
-    Code2SessionResultDto code2Session(String js_code) throws Code2SessionApiException;
+    Code2SessionResultDto code2Session(String js_code) throws BravoApiException;
 }

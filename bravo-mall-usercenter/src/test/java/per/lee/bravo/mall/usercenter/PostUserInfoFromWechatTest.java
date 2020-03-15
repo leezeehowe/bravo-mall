@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import per.lee.bravo.mall.usercenter.constant.entityStatus.FundamentalAccountInfoCompletingStatusEnum;
 import per.lee.bravo.mall.usercenter.constant.entityStatus.UserGenderEnum;
-import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
-import per.lee.bravo.mall.usercenter.service.FundamentalAccountEntityService;
+import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
+import per.lee.bravo.mall.usercenter.service.FundamentalAccountService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -17,13 +17,13 @@ import per.lee.bravo.mall.usercenter.service.FundamentalAccountEntityService;
 public class PostUserInfoFromWechatTest {
 
     @Autowired
-    FundamentalAccountEntityService fundamentalAccountEntityService;
+    FundamentalAccountService fundamentalAccountService;
 
     @Test
     public void testPoseUserInfoFromWechat() {
-        FundamentalAccountEntity fundamentalAccountEntity = fundamentalAccountEntityService.getById(1);
-        UserGenderEnum genderEnum = fundamentalAccountEntity.getGender();
-        FundamentalAccountInfoCompletingStatusEnum accountInfoCompletingStatusEnum = fundamentalAccountEntity.getIsInfoCompleted();
+        FundamentalAccount fundamentalAccount = fundamentalAccountService.getById(1);
+        UserGenderEnum genderEnum = fundamentalAccount.getGender();
+        FundamentalAccountInfoCompletingStatusEnum accountInfoCompletingStatusEnum = fundamentalAccount.getIsInfoCompleted();
         return;
     }
 

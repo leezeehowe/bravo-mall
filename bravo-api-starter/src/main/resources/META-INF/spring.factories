@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=per.lee.bravo.bsonapi.starter.configurer.BsonApiAutoConfiguration

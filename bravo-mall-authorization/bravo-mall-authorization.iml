@@ -127,6 +127,6 @@
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.1.4" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.15" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
-    <orderEntry type="module" module-name="bravo-api-starter" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:bravo-api-starter:unknown" level="project" />
   </component>
 </module>

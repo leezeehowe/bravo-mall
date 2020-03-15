@@ -1,19 +1,21 @@
 package per.lee.bravo.mall.usercenter.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
-import per.lee.bravo.mall.usercenter.constant.operationError.InternalOperationErrorEnum;
+import per.lee.bravo.mall.usercenter.constant.operationError.GlobalErrorEnum;
 import per.lee.bravo.mall.usercenter.dto.Code2SessionResultDto;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
-import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccountEntity;
-import per.lee.bravo.mall.usercenter.exception.wechat.Code2SessionApiException;
+import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccount;
+import per.lee.bravo.mall.usercenter.redis.RedisService;
+import per.lee.bravo.mall.usercenter.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.usercenter.service.*;
-import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
+import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
 import java.util.Optional;
 
 @Service
@@ -23,72 +25,100 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private WechatMiniProgramService wechatMiniProgramService;
     @Autowired
-    private FundamentalAccountEntityService fundamentalAccountEntityService;
+    private FundamentalAccountService fundamentalAccountService;
     @Autowired
-    private ExtensionWechatAccountEntityService extensionWechatAccountEntityService;
+    private ExtensionWechatAccountService extensionWechatAccountService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private RedisService redisService;
+    @Value("${redis.key.prefix.authCode}")
+    private String smsCodePrefix;
 
     @Override
-    public FundamentalAccountEntity signUp(String phoneNumber, String authCode, String password) {
-        return null;
+    public String signIn(String phoneNumber, String authCode) throws BravoApiException {
+        String storedAuthCode = redisService.get(smsCodePrefix + phoneNumber);
+        // 若无存储的验证码 或 存储的验证码和参数不符，登录失败
+        if(StrUtil.isEmptyOrUndefined(storedAuthCode) || !storedAuthCode.equals(authCode)) {
+            throw new BravoApiException(GlobalErrorEnum.LOGIN_FAIL, "验证码错误，请重新输入");
+        }
+        // 尝试从数据库中根据手机号获取基础账号信息
+        FundamentalAccount fundamentalAccount = fundamentalAccountService.getByPhone(phoneNumber);
+        // 无基础账号，未注册
+        if(fundamentalAccount == null) {
+            // 因为验证码验证通过，所以直接注册
+            fundamentalAccount = signUp(phoneNumber);
+        }
+        return tokenService.issueJwtAccessToken(fundamentalAccount.getUuid(), "bravo-mall-admin");
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public String signUpByWechatWithCode(String code) throws Code2SessionApiException {
+    public String signInByWechatWithCode(String code) throws BravoApiException {
         String accessToken, openId;
 
-        FundamentalAccountEntity fundamentalAccount;
+        FundamentalAccount fundamentalAccount;
 
-        ExtensionWechatAccountEntity latestWechatAccountInfo, originWechatAccountInfo;
+        ExtensionWechatAccount latestWechatAccountInfo, originWechatAccountInfo;
 
         latestWechatAccountInfo = attachExtendAccountInfoOfWechatByCode(code);
-        originWechatAccountInfo = extensionWechatAccountEntityService.getByOpenId(latestWechatAccountInfo.getOpenid());
+        originWechatAccountInfo = extensionWechatAccountService.getByOpenId(latestWechatAccountInfo.getOpenid());
 
         // 初次登录，需要创建基本账号
         if(originWechatAccountInfo == null) {
             fundamentalAccount = createFundamentalAccountInfo();
-            fundamentalAccountEntityService.save(fundamentalAccount);
+            fundamentalAccountService.save(fundamentalAccount);
             latestWechatAccountInfo.setUserUuid(fundamentalAccount.getUuid());
             log.info("\n新微信用户登录\n uuid: {}\n openId: {}\n sessionKey: {}", fundamentalAccount.getUuid(), latestWechatAccountInfo.getOpenid(), latestWechatAccountInfo.getSessionKey());
         }
         // 该微信用户先前已登录过本平台， 无需创建基本账号，只需更新微信账号信息
         else {
-            fundamentalAccount = fundamentalAccountEntityService.getByUUID(originWechatAccountInfo.getUserUuid());
+            fundamentalAccount = fundamentalAccountService.getByUUID(originWechatAccountInfo.getUserUuid());
             log.info("\n微信用户登录\n uuid: {}\n openId: {}\n sessionKey: {}", fundamentalAccount.getUuid(), latestWechatAccountInfo.getOpenid(), latestWechatAccountInfo.getSessionKey());
         }
 
         // 更新微信账号信息
-        extensionWechatAccountEntityService.saveOrUpdate(latestWechatAccountInfo);
+        extensionWechatAccountService.saveOrUpdate(latestWechatAccountInfo);
 
         // 生成token
         accessToken = tokenService.issueJwtAccessToken(fundamentalAccount.getUuid(), "bravo-mall-mini-program");
         return accessToken;
     }
 
+    @Override
+    public FundamentalAccount signUp(String phoneNumber) throws BravoApiException {
+        FundamentalAccount newAccount = createFundamentalAccountInfo();
+        newAccount.setPhoneNumber(phoneNumber);
+        boolean saveSuccess = fundamentalAccountService.save(newAccount);
+        // 保存到数据库失败
+        if(!saveSuccess) {
+            throw new BravoApiException(GlobalErrorEnum.CREATE_ENTITY_FAIL, "注册失败，请重试");
+        }
+        // 保存成功
+        return fundamentalAccountService.getByUUID(newAccount.getUuid());
+    }
+
 
     @Override
     public boolean saveOrUpdateAccountInfo(String uuid, PostUserInfoDto dto) {
-        FundamentalAccountEntity fundamentalAccountEntity = new FundamentalAccountEntity();
-        fundamentalAccountEntity.setUuid(uuid);
-        fundamentalAccountEntity.setGender(dto.getGender());
-        fundamentalAccountEntity.setAvatar(dto.getAvatarUrl());
-        fundamentalAccountEntity.setNickname(dto.getNickName());
-        fundamentalAccountEntity.setCountry(dto.getCountry());
-        fundamentalAccountEntity.setCity(dto.getCity());
-        fundamentalAccountEntity.setProvince(dto.getProvince());
-        return fundamentalAccountEntityService.saveOrUpdate(fundamentalAccountEntity);
+        FundamentalAccount fundamentalAccount = new FundamentalAccount();
+        fundamentalAccount.setUuid(uuid);
+        fundamentalAccount.setGender(dto.getGender());
+        fundamentalAccount.setAvatar(dto.getAvatarUrl());
+        fundamentalAccount.setNickname(dto.getNickName());
+        fundamentalAccount.setCountry(dto.getCountry());
+        fundamentalAccount.setCity(dto.getCity());
+        fundamentalAccount.setProvince(dto.getProvince());
+        return fundamentalAccountService.saveOrUpdate(fundamentalAccount);
     }
 
     @Override
-    public FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws DaoOperationAbstractException {
-        QueryWrapper<FundamentalAccountEntity> queryWrapper = new QueryWrapper<>();
+    public FundamentalAccount getFundamentalAccountInfo(String uuid) throws BravoApiException {
+        QueryWrapper<FundamentalAccount> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid", uuid).last("LIMIT 1");
         return Optional
-                .ofNullable(fundamentalAccountEntityService.getOne(queryWrapper, false))
-                .orElseThrow(() -> new EntityNotFoundException(FundamentalAccountEntity.class)
-                        .withDetail(InternalOperationErrorEnum.ABSENT_UUID.getDes()));
+                .ofNullable(fundamentalAccountService.getOne(queryWrapper, false))
+                .orElseThrow(() -> new BravoApiException(GlobalErrorEnum.ILLEGAL_ARGUMENT, "不存在账号哦"));
     }
 
     /**
@@ -96,9 +126,9 @@ public class UserServiceImpl implements UserService {
      *
      * @return 基本账户信息
      */
-    private FundamentalAccountEntity createFundamentalAccountInfo() {
-        FundamentalAccountEntity fundamentalEntity;
-        fundamentalEntity = new FundamentalAccountEntity();
+    private FundamentalAccount createFundamentalAccountInfo() {
+        FundamentalAccount fundamentalEntity;
+        fundamentalEntity = new FundamentalAccount();
         fundamentalEntity.setUuid(IdUtil.randomUUID());
         return fundamentalEntity;
     }
@@ -109,18 +139,18 @@ public class UserServiceImpl implements UserService {
      * @param code 临时登录凭证
      * @return 微信账户信息
      */
-    private ExtensionWechatAccountEntity attachExtendAccountInfoOfWechatByCode(String code) throws Code2SessionApiException {
-        ExtensionWechatAccountEntity wechatAccountInfo;
+    private ExtensionWechatAccount attachExtendAccountInfoOfWechatByCode(String code) throws BravoApiException {
+        ExtensionWechatAccount wechatAccountInfo;
         Code2SessionResultDto code2SessionResultDto;
         code2SessionResultDto = wechatMiniProgramService.code2Session(code);
         // 调用微信官方code2Session接口失败，抛出异常
         if (!code2SessionResultDto.isSuccess()) {
             String errorCode = code2SessionResultDto.getErrcode().toString();
             String errorMsg = code2SessionResultDto.getErrmsg();
-            throw new Code2SessionApiException(errorMsg, errorCode);
+            throw new BravoApiException(GlobalErrorEnum.EXTERNAL_SERVER_ERROR, "调用微信官方服务失败，请重试");
         }
         // 调用成功，把微信返回的dto转成实体类
-        wechatAccountInfo = new ExtensionWechatAccountEntity();
+        wechatAccountInfo = new ExtensionWechatAccount();
         wechatAccountInfo.setOpenid(code2SessionResultDto.getOpenid());
         wechatAccountInfo.setSessionKey(code2SessionResultDto.getSession_key());
         wechatAccountInfo.setUnionid(code2SessionResultDto.getUnionid());

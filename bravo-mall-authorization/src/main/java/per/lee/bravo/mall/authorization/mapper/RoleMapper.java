@@ -1,5 +1,6 @@
 package per.lee.bravo.mall.authorization.mapper;
 
+import org.springframework.stereotype.Repository;
 import per.lee.bravo.mall.authorization.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -11,6 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author leezeehowe
  * @since 2020-03-09
  */
+@Repository
 public interface RoleMapper extends BaseMapper<Role> {
+
+    Integer selectDeepestLevel();
 
 }

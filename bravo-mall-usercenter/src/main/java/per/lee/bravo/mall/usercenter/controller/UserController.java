@@ -3,10 +3,9 @@ package per.lee.bravo.mall.usercenter.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
-import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
-import per.lee.bravo.mall.usercenter.exception.internal.AbsentUUIDException;
+import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
+import per.lee.bravo.mall.usercenter.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.usercenter.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,10 +22,9 @@ public class UserController {
     /**
      * 获取基本账户信息
      * @return 基本账户信息
-     * @throws AbsentUUIDException 不存在的uuid
      */
     @GetMapping
-    public FundamentalAccountEntity fundamentalAccountInfo(HttpServletRequest request) throws AbsentUUIDException, DaoOperationAbstractException {
+    public FundamentalAccount fundamentalAccountInfo(HttpServletRequest request) throws BravoApiException {
         String uuid = request.getHeader(UUID_KEY);
         return userService.getFundamentalAccountInfo(uuid);
     }

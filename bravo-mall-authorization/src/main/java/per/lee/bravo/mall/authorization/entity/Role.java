@@ -43,6 +43,11 @@ public class Role extends BaseEntity {
     private Status status;
 
     /**
+     * 子角色数量
+     */
+    private Integer subCount;
+
+    /**
      * 角色描述
      */
     private String description;

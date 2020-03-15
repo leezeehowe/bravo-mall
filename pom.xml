@@ -21,6 +21,8 @@
         <swagger.version>2.9.2</swagger.version>
         <swagger-bootstrap-ui.version>1.9.0</swagger-bootstrap-ui.version>
         <bson-api-starter.version>0.0.2</bson-api-starter.version>
+        <openFeign.version>2.2.2.RELEASE</openFeign.version>
+        <redis.starter.version>2.2.5.RELEASE</redis.starter.version>
     </properties>
 
     <!-- The Basics -->
@@ -45,6 +47,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${openFeign.version}</version>
+            </dependency>
+            <!-- OpenFeign end-->
             <!-- 阿里巴巴云服务系列组件 end-->
             <!-- Mybatis-plus -->
             <dependency>
@@ -105,11 +113,14 @@
                 <version>${swagger-bootstrap-ui.version}</version>
             </dependency>
             <!-- Swagger2 end-->
+            <!-- OpenFeign -->
+            <!-- redis -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>bravo-api-starter</artifactId>
-                <version>${bson-api-starter.version}</version>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.starter.version}</version>
             </dependency>
+            <!--redis end-->
         </dependencies>
     </dependencyManagement>
 </project>

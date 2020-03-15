@@ -2,8 +2,6 @@ package per.lee.bravo.mall.authorization.controller;
 
 
 import org.springframework.web.bind.annotation.*;
-import per.lee.bravo.bsonapi.exception.BravoApiAbstractException;
-import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
 import per.lee.bravo.mall.authorization.dto.PostRoleIssueDto;
 
 /**
@@ -21,7 +19,6 @@ public class RoleIssueController extends BaseController{
     /**
      * 颁发角色给指定的用户
      * @param dto 参数
-     * @throws DaoOperationAbstractException 自动创建用户失败
      */
     @PostMapping
     public void post(@RequestBody PostRoleIssueDto dto) throws Throwable {

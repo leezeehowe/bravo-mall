@@ -1,30 +1,30 @@
 package per.lee.bravo.mall.usercenter.service;
 
-import per.lee.bravo.bsonapi.exception.dao.DaoOperationAbstractException;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
-import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccountEntity;
-import per.lee.bravo.mall.usercenter.entity.FundamentalAccountEntity;
-import per.lee.bravo.mall.usercenter.exception.internal.AbsentUUIDException;
-import per.lee.bravo.mall.usercenter.exception.wechat.Code2SessionApiException;
+import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
+import per.lee.bravo.mall.usercenter.restful.protocol.BravoApiException;
 
-public interface UserService{
+public interface UserService {
 
     /**
-     * 通过手机号码、验证码、密码进行注册
+     * 通过手机号码、验证码进行登录
      * @param phoneNumber 手机号码
      * @param authCode 手机验证码
-     * @param password 密码
-     * @return 用户信息
+     * @return token 登录凭证
      */
-    FundamentalAccountEntity signUp(String phoneNumber, String authCode, String password);
+    String signIn(String phoneNumber, String authCode) throws BravoApiException;
 
     /**
      * 通过微信注册用户
      * @param code 微信临时登录凭证
-     * @return token
+     * @return token 登录凭证
      */
-    String signUpByWechatWithCode(String code) throws Code2SessionApiException;
+    String signInByWechatWithCode(String code) throws BravoApiException;
 
+    /**
+     * 通过手机号码进行注册
+     */
+    FundamentalAccount signUp(String phoneNumber) throws BravoApiException;
 
     /**
      * 保存或更新基本账户信息
@@ -39,6 +39,6 @@ public interface UserService{
      * @param uuid 账户uuid
      * @return 基本用户信息
      */
-    FundamentalAccountEntity getFundamentalAccountInfo(String uuid) throws AbsentUUIDException, DaoOperationAbstractException;
+    FundamentalAccount getFundamentalAccountInfo(String uuid) throws BravoApiException;
 
 }

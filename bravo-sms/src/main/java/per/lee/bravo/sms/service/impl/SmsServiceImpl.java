@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import per.lee.bravo.sms.exception.SendSmsException;
 import per.lee.bravo.sms.bean.AlibabaSmsBean;
+import per.lee.bravo.sms.restful.protocol.BravoApiException;
 import per.lee.bravo.sms.service.SmsService;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class SmsServiceImpl implements SmsService {
     AlibabaSmsBean alibabaSmsBean;
 
     @Override
-    public String sendAuthCodeToSpecifyPhone(String phoneNumber) throws SendSmsException {
+    public String sendAuthCodeToSpecifyPhone(String phoneNumber) throws BravoApiException {
         JSONObject templateParams = new JSONObject();
         // 生成验证码
         String code = RandomUtil.randomNumbers(6);

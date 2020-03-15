@@ -11,9 +11,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import per.lee.bravo.sms.constant.AlibabaSendSmsException;
-import per.lee.bravo.sms.exception.SendSmsException;
-
-import java.util.Optional;
+import per.lee.bravo.sms.constant.OperationErrorEnum;
+import per.lee.bravo.sms.restful.protocol.BravoApiException;
 
 public class AlibabaSmsBean {
 
@@ -25,10 +24,10 @@ public class AlibabaSmsBean {
         request = new CommonRequest();
     }
 
-    public void doSendSms(String phoneNumbers, String templateCode, String signName, JSONObject templateParam) throws SendSmsException {
+    public void doSendSms(String phoneNumbers, String templateCode, String signName, JSONObject templateParam) throws BravoApiException {
         String message = "\"发送短信：模板Code={} 签名={} 手机号={}\\n参数={}\\n响应={}\"";
         if(StrUtil.isEmptyOrUndefined(phoneNumbers)) {
-            throw new SendSmsException(AlibabaSendSmsException.MISSING_PHONE_NUMBER.getMessage(), null).of(phoneNumbers, templateCode, signName, templateParam);
+            throw new BravoApiException(OperationErrorEnum.ILLEGAL_PARAMETER, "手机号码不能为空！");
         }
         request.setSysMethod(MethodType.POST);
         request.setSysDomain("dysmsapi.aliyuncs.com");
@@ -44,11 +43,12 @@ public class AlibabaSmsBean {
             JSONObject responseBody = JSONUtil.parseObj(response.getData());
             String code = responseBody.getStr("Code");
             if(!"OK".equals(code)) {
-                throw new SendSmsException(AlibabaSendSmsException.of(code).getMessage(), responseBody).of(phoneNumbers, templateCode, signName, templateParam);
+                throw AlibabaSendSmsException.of(code);
             }
         }
         catch (ClientException e) {
-            throw new SendSmsException(e).of(phoneNumbers, templateCode, signName, templateParam);
+            e.printStackTrace();
+            throw AlibabaSendSmsException.of(AlibabaSendSmsException.FAIL.getCode());
         }
     }
 }

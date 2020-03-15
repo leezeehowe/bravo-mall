@@ -17,19 +17,25 @@ import per.lee.bravo.mall.commodity.service.ICategoryService;
  * @since 2020-03-08
  */
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/${api.version}/category")
 public class CategoryController {
 
     @Autowired
     private ICategoryService categoryService;
 
-    @Api(value="")
+    /**
+     * 分页获取类目
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/page")
-    public IPage<Category> list(
+    public IPage<Category> page(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "5") int pageSize) {
         IPage<Category> page = new Page<>();
         page.setCurrent(pageNo).setSize(pageSize);
         return categoryService.page(page);
     }
+
 }
