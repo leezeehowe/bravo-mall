@@ -1,7 +1,7 @@
 package per.lee.bravo.mall.authorization.mapper;
 
-import per.lee.bravo.mall.authorization.entity.WebpageResource;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import per.lee.bravo.mall.authorization.entity.WebpageResource;
 
 /**
  * <p>

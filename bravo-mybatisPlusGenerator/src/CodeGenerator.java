@@ -130,11 +130,11 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass(scanner("请输入实体类父类的完整路径（无：回车）"));
+        strategy.setSuperEntityClass(scanner("请输入实体类父类的完整路径（无：输入 $ ）"));
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 公共父类
-        strategy.setSuperControllerClass(scanner("请输入控制器类父类的完整路径（无：回车）"));
+        strategy.setSuperControllerClass(scanner("请输入控制器类父类的完整路径（无：输入 $）"));
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id");
         strategy.setExclude(scanner("请输入不需要生成代码的表名，多个英文逗号分割").split(","));
@@ -149,7 +149,6 @@ public class CodeGenerator {
         mpg.setDataSource(dsc);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
-        scanner("FBI-WARNING: 注意请确保你以下的输入无误且做好版本管理！！！！准备好就回车跳过");
         mpg.execute();
     }
 
@@ -162,8 +161,11 @@ public class CodeGenerator {
     public static String scanner(String tip) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(tip);
+        String input = "";
         if (scanner.hasNext()) {
-            return scanner.next();
+            input = scanner.next();
+            if("$".equals(input)) input = "";
+            return input;
         }
         throw new MybatisPlusException("请输入正确的" + tip + "！");
     }

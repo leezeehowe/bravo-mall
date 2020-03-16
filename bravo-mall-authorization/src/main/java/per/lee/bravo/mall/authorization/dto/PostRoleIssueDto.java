@@ -1,11 +1,9 @@
 package per.lee.bravo.mall.authorization.dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class PostRoleIssueDto extends BaseDto{
+public class PostRoleIssueDto{
 
     private Long roleId;
 

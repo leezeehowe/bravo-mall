@@ -42,13 +42,14 @@ create table api_resource
 create table webpage_resource
 (
     id          bigint auto_increment primary key comment '主键，自增',
-    par_id      varchar(64) not null comment '上级id，0->一级菜单',
+    par_id      bigint not null comment '上级id，0->一级菜单',
     name        varchar(64) not null COMMENT '资源名',
     text        varchar(64) comment '页面文字内容',
     path         varchar(64) COMMENT 'URL',
     type        int not null comment '类型，0->菜单，1->菜单项，2->超链接，3->按钮',
     description varchar(200) comment '资源描述',
     level       int comment '层级',
+    sub_count    int default 0 comment '拥有子资源',
     create_by   bigint not null comment '创建页面资源的账户id，0->系统初始化',
     update_by   bigint not null comment '修改该页面资源的账号id，0->系统初始化',
 

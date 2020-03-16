@@ -15,6 +15,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Repository
 public interface RoleMapper extends BaseMapper<Role> {
 
-    Integer selectDeepestLevel();
-
 }

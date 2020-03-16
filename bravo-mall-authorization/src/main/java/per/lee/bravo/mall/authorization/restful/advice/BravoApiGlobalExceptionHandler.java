@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import per.lee.bravo.mall.authorization.constant.operationError.OperationErrorEnum;
 import per.lee.bravo.mall.authorization.restful.BravoApiContext;
 import per.lee.bravo.mall.authorization.restful.body.BravoApiRestfulBody;
 import per.lee.bravo.mall.authorization.restful.protocol.BravoApiException;
@@ -24,12 +25,13 @@ public class BravoApiGlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public BravoApiRestfulBody handleIllegalDtoParameterException(HttpServletRequest request, HttpServletResponse response, Exception _e) throws Exception {
+        _e.printStackTrace();
         if(_e instanceof BravoApiException) {
             BravoApiException e = (BravoApiException)_e;
             return context.fail(e);
         }
         else {
-            throw _e;
+            return context.fail(new BravoApiException(OperationErrorEnum.OPERATION_ERROR, ""));
         }
     }
 

@@ -8,6 +8,7 @@ import per.lee.bravo.mall.authorization.constant.operationError.OperationErrorEn
 import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 import per.lee.bravo.mall.authorization.entity.Role;
 import per.lee.bravo.mall.authorization.mapper.RoleMapper;
+import per.lee.bravo.mall.authorization.mapper.TreeMapper;
 import per.lee.bravo.mall.authorization.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.authorization.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,12 +27,10 @@ import java.util.Optional;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
 
-    final
-    RoleMapper roleMapper;
-
-    public RoleServiceImpl(RoleMapper roleMapper) {
-        this.roleMapper = roleMapper;
-    }
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private TreeMapper treeMapper;
 
     @Override
     public void isRoleAvailable(Long roleId) throws BravoApiException {
@@ -44,7 +43,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public Integer getDeepestLevel() {
-        return roleMapper.selectDeepestLevel();
+        return treeMapper.selectDeepestLevel("role");
     }
 
 }
