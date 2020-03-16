@@ -7,7 +7,7 @@ import per.lee.bravo.mall.authorization.entity.User;
 import per.lee.bravo.mall.authorization.entity.WebpageResource;
 import per.lee.bravo.mall.authorization.mapper.WebpageResourceMapper;
 import per.lee.bravo.mall.authorization.restful.protocol.BravoApiException;
-import per.lee.bravo.mall.authorization.tree.ITreeService;
+import per.lee.bravo.mall.authorization.tree.service.ITreeService;
 import per.lee.bravo.mall.authorization.service.IUserService;
 import per.lee.bravo.mall.authorization.service.IWebpageResourceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,10 +1,13 @@
-package per.lee.bravo.mall.authorization.tree;
+package per.lee.bravo.mall.authorization.tree.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import per.lee.bravo.mall.authorization.entity.WebpageResource;
 import per.lee.bravo.mall.authorization.mapper.TreeMapper;
+import per.lee.bravo.mall.authorization.tree.component.GetSubTreeComponent;
+import per.lee.bravo.mall.authorization.tree.po.PayloadNode;
 import per.lee.bravo.mall.authorization.tree.po.TreeNode;
 
 import java.util.ArrayList;
@@ -18,6 +21,8 @@ public class TreeServiceImpl<T extends TreeNode> implements ITreeService<T> {
 
     @Autowired
     TreeMapper treeMapper;
+    @Autowired
+    GetSubTreeComponent<T> getSubTreeComponent;
 
     @Override
     public Integer getDeepestLevel(String tableName) {
@@ -32,6 +37,19 @@ public class TreeServiceImpl<T extends TreeNode> implements ITreeService<T> {
             queryWrapper.eq("level", --theLevel);
             map.put(theLevel, service.list(queryWrapper));
         } while (theLevel>0);
+        return map;
+    }
+
+    @Override
+    public Map<Integer, List<T>> getAllNodeBetweenSpecifiedLevel(int beginLevel, int endLevel, IService<T> service) {
+        Map<Integer, List<T>> map = new HashMap<>();
+        int currentLevel = beginLevel + 1;
+        do {
+            QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+            queryWrapper.eq("level", currentLevel);
+            map.put(currentLevel, service.list(queryWrapper));
+            currentLevel++;
+        } while (currentLevel <= endLevel);
         return map;
     }
 
@@ -66,6 +84,12 @@ public class TreeServiceImpl<T extends TreeNode> implements ITreeService<T> {
             }
         }
         return nodeOfThePath;
+    }
+
+    @Override
+    public PayloadNode<T>  getSubTreeOf(T rootOfTheTree, IService<T> service) {
+        getSubTreeComponent.init(rootOfTheTree, this.getDeepestLevel("webpage_resource"), service);
+        return getSubTreeComponent.getSubTree();
     }
 
     @Override

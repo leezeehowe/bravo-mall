@@ -85,4 +85,5 @@ public class WebpageResource extends BaseEntity implements Serializable, TreeNod
     public void setSubCount(Integer subCount) {
         this.subCount = subCount;
     }
+
 }

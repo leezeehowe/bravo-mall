@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import per.lee.bravo.mall.authorization.tree.ITreeService;
+import per.lee.bravo.mall.authorization.tree.service.ITreeService;
 
 @RestController
 @RequestMapping("/${api.version}/tree")

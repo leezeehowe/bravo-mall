@@ -1,6 +1,7 @@
-package per.lee.bravo.mall.authorization.tree;
+package per.lee.bravo.mall.authorization.tree.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import per.lee.bravo.mall.authorization.tree.po.PayloadNode;
 import per.lee.bravo.mall.authorization.tree.po.TreeNode;
 
 import java.util.List;
@@ -16,13 +17,22 @@ public interface ITreeService<T extends TreeNode> {
     Integer getDeepestLevel(String tableName);
 
     /**
-     * 获取参数给定的层级之上所有节点并按层级分组，返回结果不包括参数所给层级。
+     * 获取参数给定的层级之上的所有节点并按层级分组，返回结果不包括参数所给层级。
      *
      * @param theLevel 所给层级
      * @return 图： Key=层级 value=该层级的所有节点，
      * 注意：返回的图的结果是按层级降序的，即假设所给层级是5，则返回的map的key：4 3 2 1 0 如此。
      */
     Map<Integer, List<T>> getAllNodeUponTheSpecifiedLevel(int theLevel, IService<T> service);
+
+    /**
+     * 获取指定层级范围之内的所有节点并按层级分组，返回结果不包括beginLevel。
+     * @param beginLevel 起始层级，树根端
+     * @param endLevel  结束层级， 叶子端
+     * @return
+     */
+    Map<Integer, List<T>> getAllNodeBetweenSpecifiedLevel(int beginLevel, int endLevel, IService<T> service);
+
 
     /**
      * 沿着路径头（子节点）的父节点ID向上得到一条往树根方向的路径，
@@ -33,7 +43,12 @@ public interface ITreeService<T extends TreeNode> {
      */
     List<T> getPathToRootFrom(T headOfThePath, IService<T> service);
 
-
+    /**
+     * 获取一个以给定节点作为树根的子树
+     * @param rootOfTheTree 子树树根
+     * @return 路径
+     */
+    PayloadNode<T> getSubTreeOf(T rootOfTheTree, IService<T> service);
 
     /**
      * 把根据给定路径头检索得到的路径上的所有节点（不包括路径头）的子节点数量添上增量。
