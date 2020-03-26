@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import per.lee.bravo.mall.usercenter.entity.ExtensionWechatAccount;
+import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
 import per.lee.bravo.mall.usercenter.mapper.ExtensionWechatAccountEntityMapper;
 import per.lee.bravo.mall.usercenter.service.ExtensionWechatAccountService;
+
+import java.util.List;
 
 @Service
 public class ExtensionWechatAccountServiceImpl extends ServiceImpl<ExtensionWechatAccountEntityMapper, ExtensionWechatAccount> implements ExtensionWechatAccountService {
@@ -17,6 +20,14 @@ public class ExtensionWechatAccountServiceImpl extends ServiceImpl<ExtensionWech
         return getOne(queryWrapper);
     }
 
+    @Override
+    public List<ExtensionWechatAccount> list(List<FundamentalAccount> fundamentalAccountList) {
+        QueryWrapper<ExtensionWechatAccount> queryWrapper = new QueryWrapper<>();
+        fundamentalAccountList.forEach(fundamentalAccount -> {
+           queryWrapper.eq("user_uuid", fundamentalAccount.getUuid()).or();
+        });
+        return this.list(queryWrapper);
+    }
 
 
     @Override

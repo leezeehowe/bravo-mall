@@ -26,7 +26,7 @@ public class Category {
     /**
      * 上级类目的id， 0表示无上级类目即一级类目
      */
-    private Long parentId;
+    private Long parId;
 
     /**
      * 类目名称

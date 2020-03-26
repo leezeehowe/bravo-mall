@@ -19,15 +19,19 @@ create table role
 
 /**
   接口资源表
+  ：子节点的url必须继承父节点的url
  */
 create table api_resource
 (
     id          bigint auto_increment primary key comment '主键，自增',
+    par_id      bigint not null comment '上级id，0->一级资源',
     url         varchar(64) not null comment '资源url路径',
     name        varchar(64) not null unique comment '资源名',
     status      int(1) default 0 comment '接口状态，0->可用，1->不可用',
     belong_to   varchar(64) not null  comment '资源所属服务名',
     description varchar(200) comment '资源描述',
+    level       int comment '层级',
+    sub_count   int default 0 comment '拥有子资源',
     create_by   bigint not null comment '创建该资源的账户id, 0->系统初始化',
     update_by   bigint not null comment '修改该角色的账号id，0->系统初始化',
     version     varchar(10) default '0.0.1' comment '资源版本',
@@ -93,7 +97,7 @@ create table role_issue
 
 
 /**
-  用户表：服务内部的用户表，为了解耦。
+  用户表：权限系统内部的用户表，为了与外部系统解耦。
  */
 create table user
 (

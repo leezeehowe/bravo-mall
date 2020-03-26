@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PostRoleIssueDto{
 
-    private Long roleId;
+    private String roleId;
 
     private String issuedUserExternalId;
 

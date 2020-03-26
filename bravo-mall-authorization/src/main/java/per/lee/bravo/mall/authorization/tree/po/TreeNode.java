@@ -13,6 +13,6 @@ public interface TreeNode {
 
     Integer getSubCount();
 
-    void setSubCount(Integer subCount);
+    void setSubCount(int subCount);
 
 }

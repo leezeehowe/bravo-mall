@@ -14,6 +14,10 @@ import per.lee.bravo.mall.authorization.entity.WebpageResource;
 import per.lee.bravo.mall.authorization.mapper.TreeMapper;
 import per.lee.bravo.mall.authorization.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.authorization.service.IWebpageResourceService;
+import per.lee.bravo.mall.authorization.tree.po.PayloadNode;
+import per.lee.bravo.mall.authorization.tree.service.ITreeService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,7 +34,7 @@ public class WebpageResourceController {
     @Autowired
     IWebpageResourceService webpageResourceService;
     @Autowired
-    TreeMapper treeMapper;
+    ITreeService<WebpageResource> treeService;
 
     @GetMapping("/page")
     public IPage<WebpageResource> get(
@@ -62,7 +66,12 @@ public class WebpageResourceController {
 
     @GetMapping
     public Integer deepestLevel() {
-        return treeMapper.selectDeepestLevel("webpage_resource");
+        return treeService.getDeepestLevel("webpage_resource");
+    }
+
+    @GetMapping("tree/all")
+    public List<PayloadNode<WebpageResource>> getAllRootTree() {
+        return webpageResourceService.getAllRootTree();
     }
 
 }

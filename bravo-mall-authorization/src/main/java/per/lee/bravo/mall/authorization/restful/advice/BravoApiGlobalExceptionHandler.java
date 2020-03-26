@@ -1,6 +1,7 @@
 package per.lee.bravo.mall.authorization.restful.advice;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,9 +29,11 @@ public class BravoApiGlobalExceptionHandler {
         _e.printStackTrace();
         if(_e instanceof BravoApiException) {
             BravoApiException e = (BravoApiException)_e;
+            response.setStatus(e.getStatus().value());
             return context.fail(e);
         }
         else {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             return context.fail(new BravoApiException(OperationErrorEnum.OPERATION_ERROR, ""));
         }
     }

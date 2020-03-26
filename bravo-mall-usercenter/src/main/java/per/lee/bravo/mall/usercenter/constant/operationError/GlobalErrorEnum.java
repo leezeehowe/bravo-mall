@@ -11,7 +11,8 @@ public enum GlobalErrorEnum implements BravoApiEnumProtocol {
     EXTERNAL_SERVER_ERROR("3", "调用外部平台服务失败", HttpStatus.INTERNAL_SERVER_ERROR),
     LOGIN_FAIL("4", "登录失败", HttpStatus.FORBIDDEN),
     CREATE_ENTITY_FAIL("5", "创建记录失败", HttpStatus.INTERNAL_SERVER_ERROR),
-    SEND_SMS_FAIL("6", "发送短信失败", HttpStatus.INTERNAL_SERVER_ERROR);
+    SEND_SMS_FAIL("6", "发送短信失败", HttpStatus.INTERNAL_SERVER_ERROR),
+    RECORD_ABSENT("7", "不存在该记录", HttpStatus.NOT_FOUND);
 
     @Setter
     private String code;

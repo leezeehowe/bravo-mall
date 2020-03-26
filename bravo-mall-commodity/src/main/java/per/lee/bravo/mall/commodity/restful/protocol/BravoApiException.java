@@ -12,9 +12,6 @@ public class BravoApiException extends Exception{
 
     private HttpStatus status;
 
-    public BravoApiException() {
-    }
-
     public BravoApiException(BravoApiEnumProtocol enumProtocol, String detail) {
         super(enumProtocol.getMessage());
         setDetail(detail);

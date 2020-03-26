@@ -4,6 +4,9 @@ package per.lee.bravo.mall.authorization.controller;
 import org.springframework.web.bind.annotation.*;
 import per.lee.bravo.mall.authorization.dto.PostRoleIssueDto;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 角色颁发表，即用户与角色之间的映射 前端控制器
@@ -13,7 +16,7 @@ import per.lee.bravo.mall.authorization.dto.PostRoleIssueDto;
  * @since 2020-03-09
  */
 @RestController
-@RequestMapping("/role-issue")
+@RequestMapping("/${api.version}/role-issue")
 public class RoleIssueController extends BaseController{
 
     /**
@@ -21,14 +24,14 @@ public class RoleIssueController extends BaseController{
      * @param dto 参数
      */
     @PostMapping
-    public void post(@RequestBody PostRoleIssueDto dto) throws Throwable {
+    public Map<String, List<String>> post(@RequestBody PostRoleIssueDto dto) throws Throwable {
         // 颁发对象 - 角色id
-        Long roleId;
+        String[] roleIdArr;
         // 颁发对象 - 用户的外部id
         String externalUserId;
         externalUserId = dto.getIssuedUserExternalId();
-        roleId = dto.getRoleId();
-        roleIssueService.issueRole(externalUserId, roleId, true);
+        roleIdArr = dto.getRoleId().split(",");
+        return roleIssueService.batchIssueRole(externalUserId, roleIdArr, true);
     }
 
 }

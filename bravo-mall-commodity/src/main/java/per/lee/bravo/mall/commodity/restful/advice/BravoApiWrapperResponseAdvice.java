@@ -2,7 +2,6 @@ package per.lee.bravo.mall.commodity.restful.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -34,9 +33,7 @@ public class BravoApiWrapperResponseAdvice implements ResponseBodyAdvice<Object>
     public BravoApiRestfulBody beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 这里是全局异常拦截处理后的RestfulBody， 属于业务失败
         if(body instanceof BravoApiRestfulBody) {
-            BravoApiRestfulBody b = (BravoApiRestfulBody) body;
-            response.setStatusCode(HttpStatus.valueOf(Integer.valueOf(b.getException().getStatus())));
-            return b;
+            return (BravoApiRestfulBody) body;
         }
         // 这里是控制层返回的数据， 属于业务成功
         return context.success(body);

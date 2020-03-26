@@ -1,8 +1,12 @@
 package per.lee.bravo.mall.usercenter.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import per.lee.bravo.mall.usercenter.dto.PostUserInfoDto;
 import per.lee.bravo.mall.usercenter.entity.FundamentalAccount;
 import per.lee.bravo.mall.usercenter.restful.protocol.BravoApiException;
+import per.lee.bravo.mall.usercenter.vo.UserForAdminVo;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -40,5 +44,15 @@ public interface UserService {
      * @return 基本用户信息
      */
     FundamentalAccount getFundamentalAccountInfo(String uuid) throws BravoApiException;
+
+    /**
+     * 分页获取用户列表
+     * @param current
+     * @param size
+     * @return
+     */
+    IPage<UserForAdminVo> pageUserForAdminVo(Integer current, Integer size);
+
+    UserForAdminVo search(String phone, String username, String uuid) throws BravoApiException;
 
 }

@@ -1,11 +1,13 @@
 package per.lee.bravo.mall.commodity.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import per.lee.bravo.mall.commodity.entity.Category;
+import per.lee.bravo.mall.commodity.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.commodity.service.ICategoryService;
 
 /**
@@ -25,17 +27,23 @@ public class CategoryController {
 
     /**
      * 分页获取类目
-     * @param pageNo
-     * @param pageSize
      * @return
      */
     @GetMapping("/page")
     public IPage<Category> page(
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "5") int pageSize) {
-        IPage<Category> page = new Page<>();
-        page.setCurrent(pageNo).setSize(pageSize);
-        return categoryService.page(page);
+            @RequestParam(defaultValue = "1") int current,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "0") Long parId,
+            @RequestParam(defaultValue = "0") int level) {
+        IPage<Category> page = new Page<>(current, size);
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("par_id", parId).eq("level", level);
+        return categoryService.page(page, queryWrapper);
+    }
+
+    @PostMapping
+    public Category create(@RequestBody Category dto) throws BravoApiException {
+        return categoryService.createOne(dto);
     }
 
 }

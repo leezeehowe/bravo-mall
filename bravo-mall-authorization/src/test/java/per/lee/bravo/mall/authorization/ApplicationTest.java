@@ -43,7 +43,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void test4() {
+    public void testGetSubTree() {
         WebpageResource webpageResource = webpageResourceService.getByName("admin-resource");
         PayloadNode<WebpageResource> payloadNode = treeService.getSubTreeOf(webpageResource, webpageResourceService);
         String jsonStr = JSONUtil.toJsonPrettyStr(payloadNode);

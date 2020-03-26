@@ -82,7 +82,7 @@ public class WebpageResource extends BaseEntity implements Serializable, TreeNod
      */
     private LocalDateTime updateTime;
 
-    public void setSubCount(Integer subCount) {
+    public void setSubCount(int subCount) {
         this.subCount = subCount;
     }
 

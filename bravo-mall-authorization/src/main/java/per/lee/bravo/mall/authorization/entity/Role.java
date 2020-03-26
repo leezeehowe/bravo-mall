@@ -6,6 +6,7 @@ import per.lee.bravo.mall.authorization.constant.statusEnum.Status;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import per.lee.bravo.mall.authorization.tree.po.TreeNode;
 
 /**
  * <p>
@@ -18,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class Role extends BaseEntity {
+public class Role extends BaseEntity implements TreeNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,5 +73,15 @@ public class Role extends BaseEntity {
      */
     private LocalDateTime updateTime;
 
+    public Role(Long parId, Integer level, String name, String description) {
+        this.parId = parId;
+        this.name = name;
+        this.level = level;
+        this.description = description;
+    }
 
+    @Override
+    public void setSubCount(int subCount) {
+        this.subCount = subCount;
+    }
 }

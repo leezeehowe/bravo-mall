@@ -7,8 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import per.lee.bravo.mall.authorization.dto.PostRoleDto;
 import per.lee.bravo.mall.authorization.entity.Role;
+import per.lee.bravo.mall.authorization.entity.WebpageResource;
+import per.lee.bravo.mall.authorization.restful.protocol.BravoApiException;
 import per.lee.bravo.mall.authorization.service.IRoleService;
+import per.lee.bravo.mall.authorization.tree.po.PayloadNode;
 import per.lee.bravo.mall.authorization.vo.RoleVo;
 
 import java.util.ArrayList;
@@ -52,9 +56,19 @@ public class RoleController {
         return roleService.page(page, queryWrapper);
     }
 
+    @PostMapping
+    public Role post(@RequestBody PostRoleDto dto) throws BravoApiException {
+        roleService.createRole(dto.getName(), dto.getDescription(), dto.getParId(), dto.getLevel());
+        return roleService.getByName(dto.getName());
+    }
+
     @GetMapping("/deepestLevel")
     public Integer deepestLevel() {
         return roleService.getDeepestLevel();
     }
 
+    @GetMapping("/tree/all")
+    public List<PayloadNode<Role>> allRootTree() {
+        return roleService.getAllRootTree();
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import per.lee.bravo.mall.commodity.constant.OperationErrorEnum;
 import per.lee.bravo.mall.commodity.restful.BravoApiContext;
 import per.lee.bravo.mall.commodity.restful.body.BravoApiRestfulBody;
 import per.lee.bravo.mall.commodity.restful.protocol.BravoApiException;
@@ -26,18 +27,16 @@ public class BravoApiGlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public BravoApiRestfulBody handleIllegalDtoParameterException(HttpServletRequest request, HttpServletResponse response, Exception _e) throws Exception {
+        _e.printStackTrace();
         if(_e instanceof BravoApiException) {
             BravoApiException e = (BravoApiException)_e;
+            response.setStatus(e.getStatus().value());
             return context.fail(e);
         }
         else {
-            BravoApiException cus = new BravoApiException();
-            cus.setDetail(_e.getMessage());
-            cus.setCode(_e.getClass().getSimpleName());
-            cus.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return context.fail(cus);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return context.fail(new BravoApiException(OperationErrorEnum.OPERATION_ERROR, ""));
         }
     }
-
 
 }

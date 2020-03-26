@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import per.lee.bravo.mall.authorization.tree.po.TreeNode;
 
 /**
  * <p>
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class ApiResource extends BaseEntity {
+public class ApiResource extends BaseEntity implements TreeNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,5 +71,14 @@ public class ApiResource extends BaseEntity {
      */
     private LocalDateTime updateTime;
 
+    private Long parId;
 
+    private Integer subCount;
+
+    private Integer level;
+
+    @Override
+    public void setSubCount(int subCount) {
+        this.subCount = subCount;
+    }
 }

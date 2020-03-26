@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import per.lee.bravo.mall.commodity.restful.body.errors.ErrorItem;
 import per.lee.bravo.mall.commodity.restful.body.meta.Meta;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,5 +31,4 @@ public class BravoApiRestfulBody {
         this.server_time = server_time;
         this.meta = meta;
     }
-
 }

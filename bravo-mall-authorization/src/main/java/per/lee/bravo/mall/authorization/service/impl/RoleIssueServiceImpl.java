@@ -1,5 +1,6 @@
 package per.lee.bravo.mall.authorization.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import per.lee.bravo.mall.authorization.constant.operationError.OperationErrorEnum;
@@ -13,6 +14,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import per.lee.bravo.mall.authorization.service.IRoleService;
 import per.lee.bravo.mall.authorization.service.IUserService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -42,6 +48,13 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
     }
 
     @Override
+    public List<RoleIssue> listRoleIssuesOfSpecifiedUser(User user, Status status) {
+        QueryWrapper<RoleIssue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId()).eq("status", status.getCode());
+        return list(queryWrapper);
+    }
+
+    @Override
     public void issueRole(String externalUserId, Long roleId, boolean createCreateUserIfAbsent) throws BravoApiException {
         RoleIssue roleIssue;
         User internalUser, requestingUser;
@@ -64,7 +77,26 @@ public class RoleIssueServiceImpl extends ServiceImpl<RoleIssueMapper, RoleIssue
         if(getOne(internalUser.getId(), roleId, Status.EFFECTIVE) == null) {
             save(roleIssue);
         } else {
-            throw new BravoApiException(OperationErrorEnum.CONFLICT_ENTITY_ERROR, "当前用户已持有该角色，请勿重复颁发");
+            throw new BravoApiException(OperationErrorEnum.CONFLICT_ENTITY_ERROR, StrUtil.format("用户[ID={}]已持有角色[ID={}]，请勿重复颁发", internalUser.getId(), roleId));
         }
+    }
+
+    @Override
+    public Map<String, List<String>> batchIssueRole(String externalUserId, String[] roleIdArray, boolean createCreateUserIfAbsent) {
+        Map<String, List<String>> map = new HashMap<>();
+        List<String> successfulMessageList = new ArrayList<>();
+        List<String> failMessageList = new ArrayList<>();
+        for (String s : roleIdArray) {
+            Long roleId = Long.valueOf(s);
+            try {
+                issueRole(externalUserId, roleId, createCreateUserIfAbsent);
+                successfulMessageList.add(StrUtil.format("成功向用户颁发角色[ID={}]", roleId));
+            } catch (BravoApiException e) {
+                failMessageList.add(e.getDetail());
+            }
+        }
+        map.put("successfulIssued", successfulMessageList);
+        map.put("failIssued", failMessageList);
+        return map;
     }
 }

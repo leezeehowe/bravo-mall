@@ -59,4 +59,10 @@ public interface ITreeService<T extends TreeNode> {
      * @return 添上增量后的路径
      */
     List<T> increaseSubCountOfThePath(T headOfThePath, int increment, IService<T> service, boolean saveOrNot);
+
+    /**
+     * 获取所有树根节点，即父节点id为0
+     * @return
+     */
+    List<T> getAllRootNode(IService<T> service);
 }
